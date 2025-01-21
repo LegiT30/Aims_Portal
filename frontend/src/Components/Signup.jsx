@@ -10,7 +10,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      await axios.post('http://localhost:8081/api/auth/signup', { email, role, name});
+      await axios.post('https://aims-portal.vercel.app/api/auth/signup', { email, role, name});
       alert('Signup successful. Please check your email for OTP to log in.');
       navigate('/');
     } catch (error) {
