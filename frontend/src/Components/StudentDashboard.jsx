@@ -16,7 +16,7 @@ function StudentDashboard() {
                 setUser(getUser);
 
                 const availableResponse = await axios.get(
-                    'http://localhost:8081/api/courses/available',
+                    'https://aims-portal.vercel.app/api/courses/available',
                     {
                         headers: {Authorization: token},
                     }
@@ -25,7 +25,7 @@ function StudentDashboard() {
                 setAvailableCourses(availableResponse.data);
 
                 const appliedResponse = await axios.get(
-                    'http://localhost:8081/api/courses/student-applications',
+                    'https://aims-portal.vercel.app/api/courses/student-applications',
                     {
                         headers: {Authorization: token},
                     }
@@ -44,14 +44,14 @@ function StudentDashboard() {
         try{
             const token = localStorage.getItem('token');
             await axios.post(
-                'http://localhost:8081/api/courses/apply',
+                'https://aims-portal.vercel.app/api/courses/apply',
                 {courseId},
                 {headers : {Authorization: token}}
             );
             alert('Applied successfully');
 
             const appliedResponse = await axios.get(
-                'http://localhost:8081/api/courses/student-applications',
+                'https://aims-portal.vercel.app/api/courses/student-applications',
                 {
                     headers: {Authorization : token}
                 }
