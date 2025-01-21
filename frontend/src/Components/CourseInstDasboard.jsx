@@ -15,7 +15,7 @@ function CourseInstDashboard() {
         const getUser = localStorage.getItem('name');
         setUser(getUser);
 
-        const response = await axios.get('http://localhost:8081/api/courses/instructor', {
+        const response = await axios.get('https://aims-portal.vercel.app/api/courses/instructor', {
           headers: { Authorization: token },
         });
        console.log("i am res: ",response.data);
@@ -33,7 +33,7 @@ function CourseInstDashboard() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:8081/api/courses/add',
+        'https://aims-portal.vercel.app/api/courses/add',
         { name: newCourseName, courseCode: newCourseCode },
         { headers: { Authorization: token } }
       );
@@ -51,7 +51,7 @@ function CourseInstDashboard() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:8081/api/courses/instructor-approval',
+        'https://aims-portal.vercel.app/api/courses/instructor-approval',
         { courseId, studentId, status },
         { headers: { Authorization: token } }
       );
