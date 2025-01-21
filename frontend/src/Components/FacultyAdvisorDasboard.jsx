@@ -14,7 +14,7 @@ function FacultyAdvisorDasboard() {
         
         setUser(getUser);
         const response = await axios.get(
-          'http://localhost:8081/api/courses/advisor-applications',
+          'https://aims-portal.vercel.app/api/courses/advisor-applications',
           {
             headers : {Authorization: token},
           }
@@ -33,7 +33,7 @@ function FacultyAdvisorDasboard() {
         const token = localStorage.getItem('token');
         console.log("i am satuus: ",status);
         await axios.post(
-          'http://localhost:8081/api/courses/advisor-approval',
+          'https://aims-portal.vercel.app/api/courses/advisor-approval',
           {courseId,studentId,status},
           {headers : {Authorization : token}}
         );
