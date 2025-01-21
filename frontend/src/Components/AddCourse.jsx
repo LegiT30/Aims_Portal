@@ -11,7 +11,7 @@ const AddCourse = () => {
       const token = localStorage.getItem('token');
       console.log("Request Body1111:", { name });
       await axios.post(
-        'http://localhost:8081/api/courses/add',
+        'https://aims-portal.vercel.app/api/courses/add',
         { name },
         { headers: { Authorization: token,'Content-Type': 'application/json'  } }
       );
