@@ -10,7 +10,7 @@ const Login = () =>{
 
   const handleRequestOtp = async () => {
     try {
-      await axios.post('http://localhost:8081/api/auth/login', {email });
+      await axios.post('https://aims-portal.vercel.app/api/auth/login', {email });
       setStep(2);
       alert('OTP sent to your email');
     } catch (error) {
@@ -21,7 +21,7 @@ const Login = () =>{
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post('http://localhost:8081/api/auth/verify-otp', { email, otp });
+      const response = await axios.post('https://aims-portal.vercel.app/api/auth/verify-otp', { email, otp });
       //console.log("i am response",response);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('name',response.data.name);
