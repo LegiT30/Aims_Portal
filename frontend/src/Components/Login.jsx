@@ -40,6 +40,15 @@ const Login = () =>{
     }
   };
 
+  const goToSignup = async () => {
+     try{
+      navigate('/signup');
+     }catch(error){
+        console.error(error);
+        alert('Cannot go to signup');
+     }
+  }
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-black via-transparent to-black p-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
@@ -59,9 +68,15 @@ const Login = () =>{
             />
             <button
               onClick={handleRequestOtp}
-              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300"
+              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 mb-3"
             >
               Request OTP
+            </button>
+            <button
+              onClick={goToSignup}
+              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300"
+            >
+              Signup
             </button>
           </div>
         ) : (

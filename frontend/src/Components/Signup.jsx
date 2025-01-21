@@ -19,6 +19,15 @@ const Signup = () => {
     }
   };
 
+  const goToLogin = async () => {
+    try {
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      alert('Error in going to login');
+    }
+  }
+
   return (
     <div className="flex flex-col justify-center font-[sans-serif] sm:h-screen p-4">
         <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
@@ -48,9 +57,15 @@ const Signup = () => {
         </select>
         <button
             onClick={handleSignup}
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 mb-3"
         >
             Signup
+        </button>
+        <button
+            onClick={goToLogin}
+            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700"
+        >
+            Go to Login
         </button>
         </div>
     </div>
