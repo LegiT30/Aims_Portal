@@ -18,12 +18,12 @@ const transporter = nodemailer.createTransport({
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 router.post('/signup', async (req, res) => {
-    const { email, role, name} = req.body;
+    const { email, role, name,password} = req.body;
 
     // Validate input
-    // if (!email || !role) {
-    //     return res.status(400).json({ error: 'Email and role are required' });
-    // }
+    if (!email || !role || !password) {
+        return res.status(400).json({ error: 'Email and Password are required' });
+    }
 
     try {
         // Check if user already exists
@@ -33,7 +33,9 @@ router.post('/signup', async (req, res) => {
         }
 
         // Create a new user
-        const newUser = new User({ name,email, role });
+        const hashPassword = await bcrypt.hash(password,10);
+
+        const newUser = new User({ name,email,password: hashPassword,role });
         await newUser.save();
 
         res.status(201).json({ message: 'User registered successfully' });
@@ -44,9 +46,10 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/login',async(req,res) => {
-    const {email} = req.body;
+    const {otpEmail} = req.body;
     console.log("i am at login user",req.user);
     console.log("i am at login body",req.body);
+    const email = req.body.otpEmail;
 
     try{
         
@@ -75,7 +78,9 @@ router.post('/login',async(req,res) => {
 });
 
 router.post('/verify-otp', async (req,res) => {
-    const {email,otp} = req.body;
+    const {otpEmail,otp} = req.body;
+    console.log("i am body at verify",req.body);
+    const email = req.body.otpEmail;
 
     try{
         const user = await User.findOne({email});
@@ -99,5 +104,29 @@ router.post('/verify-otp', async (req,res) => {
         res.status(500).json({message: 'Error verifying otp',err});
     }
 });
+
+router.post('/passlogin',async(req,res) => {
+    const {email,password} =req.body;
+    try{    
+
+        const user = await User.findOne({email});
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const isPasswordMatch = await bcrypt.compare(password,user.password);
+        if (!isPasswordMatch) return res.status(400).json({ message: 'Invalid credentials' });
+
+        const token = jwt.sign(
+            {id: user._id,role: user.role},
+            process.env.JWT_SECRET,
+            {expiresIn : '24h'}
+
+        );
+        res.status(200).json({message : 'Login successful',token,role:user.role,name:user.name});
+
+    }catch(error){
+        console.error('Error in login:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+})
 
 module.exports = router;

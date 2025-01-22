@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () =>{
   const [email, setEmail] = useState('');
+  const [otpEmail,setOtpEmail]= useState('');
+  const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
 
   const handleRequestOtp = async () => {
     try {
-      await axios.post('http://localhost:8081/api/auth/login', {email });
+      await axios.post('http://localhost:8081/api/auth/login', { otpEmail });
       setStep(2);
       alert('OTP sent to your email');
     } catch (error) {
@@ -21,7 +23,7 @@ const Login = () =>{
 
   const handleVerifyOtp = async () => {
     try {
-      const response = await axios.post('http://localhost:8081/api/auth/verify-otp', { email, otp });
+      const response = await axios.post('http://localhost:8081/api/auth/verify-otp', { otpEmail, otp });
       //console.log("i am response",response);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('name',response.data.name);
@@ -40,6 +42,30 @@ const Login = () =>{
     }
   };
 
+  const handleLogin = async () => {
+      try{
+        const response = await axios.post(
+          'http://localhost:8081/api/auth/passlogin',
+          {email,password}
+        );
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('name',response.data.name);
+        const { token, role } = response.data;
+        console.log("i am data :" ,response.data);
+        if (role === 'student') {
+          navigate('/student-dashboard');
+        } else if (role === 'course_instructor') {
+          navigate('/instructor-dashboard');
+        } else if (role === 'faculty_advisor') {
+          navigate('/advisor-dashboard');
+        }
+      }catch(error){
+        console.error(error);
+        alert('Error logging in');
+      }
+
+  }
+
   const goToSignup = async () => {
      try{
       navigate('/signup');
@@ -51,36 +77,78 @@ const Login = () =>{
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-black via-transparent to-black p-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">Login</h2>
+      <div>
+        
         {step === 1 ? (
           <div>
-            <label className="block text-gray-600 font-medium mb-2" htmlFor="email">
-              Enter your email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="example@domain.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <button
-              onClick={handleRequestOtp}
-              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 mb-3"
-            >
-              Request OTP
-            </button>
-            <button
-              onClick={goToSignup}
-              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300"
-            >
-              Signup
-            </button>
+            <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg mb-5">
+              <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center"> OTP Login</h2>
+              <label className="block text-gray-600 font-medium mb-2" htmlFor="email">
+                Enter your email:
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="example@domain.com"
+                value={otpEmail}
+                onChange={(e) => setOtpEmail(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <button
+                onClick={handleRequestOtp}
+                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 mb-3"
+              >
+                Request OTP
+              </button>
+            
+            </div>
+            <h2 className="text-3xl font-extrabold text-gray-100 mb-6 text-center">OR</h2>
+            <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
+              <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">Password Login</h2>
+              <label className="block text-gray-600 font-medium mb-1" htmlFor="email">
+                Enter your email:
+              </label>
+              <input
+                id="email2"
+                type="email"
+                placeholder="example@domain.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <label className="block text-gray-600 font-medium mb-1" htmlFor="email">
+                Enter your password:
+              </label>
+              <input
+                id="pasword"
+                type="password"
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <button
+                onClick={handleLogin}
+                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 mb-2"
+              >
+                Login
+              </button>
+              <label className="block text-gray-600 font-medium mb-1" htmlFor="email">
+                Don't have a account,please signup...
+              </label>
+              <button
+                onClick={goToSignup}
+                className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300"
+              >
+                Signup
+              </button>
+            </div>
           </div>
+          
+          
         ) : (
-          <div>
+          <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg mb-5">
+            <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center"> OTP Login</h2>
             <label className="block text-gray-600 font-medium mb-2" htmlFor="otp">
               Enter OTP:
             </label>

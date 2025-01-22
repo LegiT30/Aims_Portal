@@ -6,12 +6,13 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('student');
   const [name,setName] =  useState('');
+  const [password,setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSignup = async () => {
     try {
-      await axios.post('http://localhost:8081/api/auth/signup', { email, role, name});
-      alert('Signup successful. Please check your email for OTP to log in.');
+      await axios.post('http://localhost:8081/api/auth/signup', { email, role, name,password});
+      alert('Signup successful.');
       navigate('/');
     } catch (error) {
       console.error(error);
@@ -46,6 +47,13 @@ const Signup = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
         />
+        <input
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
+        />
         <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
@@ -61,6 +69,7 @@ const Signup = () => {
         >
             Signup
         </button>
+        
         <button
             onClick={goToLogin}
             className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700"
