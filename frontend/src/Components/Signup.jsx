@@ -11,7 +11,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      await axios.post('http://localhost:8081/api/auth/signup', { email, role, name,password});
+      await axios.post('https://aims-portal.vercel.app/api/auth/signup', { email, role, name,password});
       alert('Signup successful.');
       navigate('/');
     } catch (error) {
