@@ -23,7 +23,7 @@ const CourseSchema = new mongoose.Schema({
             },
             status:{ 
                 type: String, 
-                enum: ['pending', 'instructor_approved', 'advisor_approved', 'enrolled','instructor_rejected','advisor_rejected'], 
+                enum: ['pending', 'instructor_approved', 'advisor_approved', 'enrolled','instructor_rejected','advisor_rejected','dropped'], 
                 default: 'pending' 
             },
         },

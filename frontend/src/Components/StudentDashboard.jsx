@@ -16,16 +16,16 @@ function StudentDashboard() {
                 setUser(getUser);
 
                 const availableResponse = await axios.get(
-                    'https://aims-portal.vercel.app/api/courses/available',
+                    'http://localhost:8081/api/courses/available',
                     {
                         headers: {Authorization: token},
                     }
                 );
-                console.log(availableResponse.data);
+                //console.log(availableResponse.data);
                 setAvailableCourses(availableResponse.data);
 
                 const appliedResponse = await axios.get(
-                    'https://aims-portal.vercel.app/api/courses/student-applications',
+                    'http://localhost:8081/api/courses/student-applications',
                     {
                         headers: {Authorization: token},
                     }
@@ -44,14 +44,14 @@ function StudentDashboard() {
         try{
             const token = localStorage.getItem('token');
             await axios.post(
-                'https://aims-portal.vercel.app/api/courses/apply',
+                'http://localhost:8081/api/courses/apply',
                 {courseId},
                 {headers : {Authorization: token}}
             );
             alert('Applied successfully');
 
             const appliedResponse = await axios.get(
-                'https://aims-portal.vercel.app/api/courses/student-applications',
+                'http://localhost:8081/api/courses/student-applications',
                 {
                     headers: {Authorization : token}
                 }
@@ -64,9 +64,35 @@ function StudentDashboard() {
         }
     }
 
+    const handleDropCourse = async (courseId) => {
+        try{
+          //console.log(courseId);
+          const token = localStorage.getItem('token');
+          await axios.post(
+            'http://localhost:8081/api/courses/drop',
+            {courseId},
+            {headers : {Authorization : token}}
+          )
+          alert('Course dropped successfully');
+        }catch (error) {
+          console.error(error);
+          alert('Error dropping course');
+        }
+    }
+
+    const handleLogout = () => {
+      localStorage.clear();
+      window.location.href = '/'; 
+    }
+
   return (
-    <div>
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80"></div>
+    <div className="min-h-screen bg-gradient-to-b from-black via-transparent to-black opacity-80 py-10">
+      <button
+        onClick={handleLogout}
+        className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300 z-50"
+      >
+        Logout
+      </button>
 
       <div className="relative z-10 p-6 sm:p-10 max-w-6xl mx-auto">
       <h1 className="text-4xl font-bold text-gray-200 text-center mb-4">Student Dashboard</h1>
@@ -87,8 +113,16 @@ function StudentDashboard() {
                   <h3 className="text-l font-semibold text-gray-500">Course Code : {course.courseCode}</h3>
                   <h3 className="text-l font-semibold text-gray-500">Course Instructor : {course.courseInst}</h3>
                   <p className="text-sm text-black mt-1">
-                    Status: <span className="font-medium capitalize">{course.status}</span>
+                    Status: <span className="font-medium capitalize mb-1">{course.status}</span>
                   </p>
+                  {course.status === 'enrolled' && (
+                    <button
+                      onClick={() => handleDropCourse(course.courseId)}
+                      className="bg-red-500 text-white py-1 px-3 rounded-lg hover:bg-red-600 transition duration-300 mt-1"
+                    >
+                      Drop
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

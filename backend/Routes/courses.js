@@ -207,5 +207,26 @@ router.post('/advisor-approval',verifyToken,async (req,res) => {
     }
 })
 
+router.post('/drop',verifyToken,async (req,res) => {
+    const courseId = req.body.courseId;
+    const studentId = req.user.id;
+    //console.log("i am courseId",courseId);
+    //console.log("i am studentId",studentId);
+
+    try{
+        //console.log(' iam course');
+        const course = await Course.findById(courseId);
+        //console.log(' iam course',course);
+        const student = course.students.find((s) => s.student.toString() === studentId);
+       //console.log('i am status: ',student.status);
+        student.status = 'dropped';
+
+        await course.save();
+       res.status(200).send({ message: 'Course dropped successfully' });
+    }catch (error) {
+        res.status(500).send({ error: 'Error dropping course' });
+    }
+})
+
   
 module.exports = router;

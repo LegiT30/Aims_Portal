@@ -15,10 +15,10 @@ function CourseInstDashboard() {
         const getUser = localStorage.getItem('name');
         setUser(getUser);
 
-        const response = await axios.get('https://aims-portal.vercel.app/api/courses/instructor', {
+        const response = await axios.get('http://localhost:8081/api/courses/instructor', {
           headers: { Authorization: token },
         });
-       console.log("i am res: ",response.data);
+      // console.log("i am res: ",response.data);
         setCourses(response.data);
       } catch (error) {
         console.error(error);
@@ -33,10 +33,17 @@ function CourseInstDashboard() {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'https://aims-portal.vercel.app/api/courses/add',
+        'http://localhost:8081/api/courses/add',
         { name: newCourseName, courseCode: newCourseCode },
         { headers: { Authorization: token } }
       );
+
+      const response = await axios.get('http://localhost:8081/api/courses/instructor', {
+          headers: { Authorization: token },
+        });
+      // console.log("i am res: ",response.data);
+        setCourses(response.data);
+
       alert('Course added successfully');
       setNewCourseName('');
       setNewCourseCode('');
@@ -48,13 +55,20 @@ function CourseInstDashboard() {
   };
 
   const handleApproval = async (courseId, studentId, status) => {
-    try {
+    try { 
       const token = localStorage.getItem('token');
       await axios.post(
-        'https://aims-portal.vercel.app/api/courses/instructor-approval',
+        'http://localhost:8081/api/courses/instructor-approval',
         { courseId, studentId, status },
         { headers: { Authorization: token } }
       );
+
+      const response = await axios.get('http://localhost:8081/api/courses/instructor', {
+          headers: { Authorization: token },
+        });
+      // console.log("i am res: ",response.data);
+        setCourses(response.data);
+
       alert(`Request ${status === 'instructor_approved' ? 'approved' : 'rejected'}`);
     } catch (error) {
       console.error(error);
@@ -62,13 +76,21 @@ function CourseInstDashboard() {
     }
   };
 
-  const abc = () => {
-    console.log("done done dnone"); 
+  
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = '/'; 
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-transparent to-black opacity-80 py-10">
       <div className="max-w-6xl mx-auto p-6">
+        <button
+          onClick={handleLogout}
+          className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300 z-50"
+        >
+          Logout
+        </button>
         <h2 className="text-4xl font-extrabold text-gray-200 text-center mb-4">Instructor Dashboard</h2>
         <h2 className="text-4xl font-extrabold text-gray-200 text-center mb-10">{user}</h2>
 

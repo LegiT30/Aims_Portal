@@ -14,7 +14,7 @@ function FacultyAdvisorDasboard() {
         
         setUser(getUser);
         const response = await axios.get(
-          'https://aims-portal.vercel.app/api/courses/advisor-applications',
+          'http://localhost:8081/api/courses/advisor-applications',
           {
             headers : {Authorization: token},
           }
@@ -31,9 +31,9 @@ function FacultyAdvisorDasboard() {
   const handleApproval = async (courseId,studentId,status) => {
       try{
         const token = localStorage.getItem('token');
-        console.log("i am satuus: ",status);
+       // console.log("i am satuus: ",status);
         await axios.post(
-          'https://aims-portal.vercel.app/api/courses/advisor-approval',
+          'http://localhost:8081/api/courses/advisor-approval',
           {courseId,studentId,status},
           {headers : {Authorization : token}}
         );
@@ -48,9 +48,20 @@ function FacultyAdvisorDasboard() {
       }
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = '/'; 
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-transparent to-black opacity-80 py-10">
       <div className="max-w-6xl mx-auto p-6">
+        <button
+            onClick={handleLogout}
+            className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300 z-50"
+          >
+            Logout
+        </button>
         <h2 className="text-4xl font-extrabold text-gray-100 text-center mb-4">
           Faculty Advisor Dashboard
         </h2>
