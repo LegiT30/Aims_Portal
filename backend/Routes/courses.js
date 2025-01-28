@@ -31,6 +31,10 @@ router.get('/getuser',verifyToken, async(req,res) => {
 router.get('/available', async (req, res) => {
     try {
       const courses = await Course.find().populate('instructor', 'name');
+    //   const avai = [];
+    //   courses.map((course) => {
+    //     if(course.students.status)
+    //   })
       res.json(courses);
     } catch (error) {
       console.error(error);

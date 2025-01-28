@@ -21,7 +21,7 @@ function StudentDashboard() {
                         headers: {Authorization: token},
                     }
                 );
-                //console.log(availableResponse.data);
+                //console.log("i am avail",availableResponse.data);
                 setAvailableCourses(availableResponse.data);
 
                 const appliedResponse = await axios.get(
@@ -43,11 +43,12 @@ function StudentDashboard() {
     const handleApply = async (courseId) => {
         try{
             const token = localStorage.getItem('token');
-            await axios.post(
+            const response = await axios.post(
                 'https://aims-portal.vercel.app/api/courses/apply',
                 {courseId},
                 {headers : {Authorization: token}}
             );
+            //console.log(response.data.message);
             alert('Applied successfully');
 
             const appliedResponse = await axios.get(
@@ -60,7 +61,8 @@ function StudentDashboard() {
             setAppliedCourses(appliedResponse.data);  
         }catch(error){
             console.error(error); 
-            alert('Error applying for course');
+            //console.log(error);
+            alert('Already applied to this course.');
         }
     }
 
@@ -74,6 +76,14 @@ function StudentDashboard() {
             {headers : {Authorization : token}}
           )
           alert('Course dropped successfully');
+          const appliedResponse = await axios.get(
+              'https://aims-portal.vercel.app/api/courses/student-applications',
+              {
+                  headers: {Authorization : token}
+              }
+          );
+          
+          setAppliedCourses(appliedResponse.data);  
         }catch (error) {
           console.error(error);
           alert('Error dropping course');

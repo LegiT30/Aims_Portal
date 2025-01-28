@@ -65,10 +65,11 @@ router.post('/login',async(req,res) => {
         await user.save();
 
         await transporter.sendMail({
-            from: "chunchunmaaru106@gmail.com",
+            from: "rajyadav30042003@gmail.com",
             to: email,
-            subject: 'Your otp for login',
-            text: `Your otp is ${otp}`,
+            subject: 'OTP AIMS PORTAL',
+            text: `Welcome to Aims Portal.
+            This is your OTP ${otp}`,
         });
 
         res.status(200).json({message : "Otp sent to mail"})
@@ -79,7 +80,7 @@ router.post('/login',async(req,res) => {
 
 router.post('/verify-otp', async (req,res) => {
     const {otpEmail,otp} = req.body;
-    console.log("i am body at verify",req.body);
+    //console.log("i am body at verify",req.body);
     const email = req.body.otpEmail;
 
     try{

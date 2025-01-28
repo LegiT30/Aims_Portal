@@ -5,18 +5,18 @@ import { useNavigate } from 'react-router-dom';
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('student');
-  const [name,setName] =  useState('');
-  const [password,setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSignup = async () => {
     try {
-      await axios.post('https://aims-portal.vercel.app/api/auth/signup', { email, role, name,password});
+      await axios.post('https://aims-portal.vercel.app/api/auth/signup', { email, role, name, password });
       alert('Signup successful.');
       navigate('/');
     } catch (error) {
       console.error(error);
-      alert('Error during signup');
+      alert('User Already Exists');
     }
   };
 
@@ -27,56 +27,82 @@ const Signup = () => {
       console.error(error);
       alert('Error in going to login');
     }
-  }
+  };
 
   return (
-    <div className="flex flex-col justify-center font-[sans-serif] sm:h-screen p-4">
-        <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Signup</h2>
-        <input
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-black via-transparent to-black opacity-80">
+      <div className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-6">Create an Account</h2>
+        <p className="text-center text-gray-600 mb-8">
+          Please fill in the form to create your account.
+        </p>
+        
+        {/* Name Input */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+          <input
             type="text"
-            placeholder="Enter Name"
+            placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
-        />
-        <input
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+
+        {/* Email Input */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
             type="email"
-            placeholder="Enter email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
-        />
-        <input
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+
+        {/* Password Input */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input
             type="password"
-            placeholder="Enter password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
-        />
-        <select
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+
+        {/* Role Selection */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+          <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full p-2 mb-4 border border-gray-300 rounded-lg"
-        >
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
             <option value="student">Student</option>
             <option value="course_instructor">Course Instructor</option>
             <option value="faculty_advisor">Faculty Advisor</option>
-        </select>
-        <button
-            onClick={handleSignup}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 mb-3"
-        >
-            Signup
-        </button>
-        
-        <button
-            onClick={goToLogin}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700"
-        >
-            Go to Login
-        </button>
+          </select>
         </div>
+
+        {/* Signup Button */}
+        <button
+          onClick={handleSignup}
+          className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 mb-4"
+        >
+          Signup
+        </button>
+
+        {/* Go to Login Button */}
+        <button
+          onClick={goToLogin}
+          className="w-full bg-gray-200 text-gray-800 py-3 px-4 rounded-lg hover:bg-gray-300 transition duration-300"
+        >
+          Back to Login
+        </button>
+      </div>
     </div>
   );
 };
